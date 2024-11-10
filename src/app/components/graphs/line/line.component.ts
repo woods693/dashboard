@@ -1,87 +1,151 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartJSModule } from './chartjs.module';
 import { MockData, mockData } from '../../../../assets/data/mock_data';
-import { reduce } from 'rxjs';
+import { Chart, registerables } from 'chart.js';
 
 @Component({
   standalone: true,
-  imports: [BaseChartDirective, ChartJSModule],
+  imports: [BaseChartDirective],
   selector: 'app-line',
   templateUrl: './line.component.html',
   styleUrl: './line.component.scss'
 })
-export class LineComponent implements OnInit{
+export class LineComponent implements OnInit, OnChanges{
 
+  @Input() startDate!: string;
+  @Input() endDate!: string;
+  public dateList: string[] = [];
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-  ngOnInit(): void {
+  constructor() {
+    Chart.register(...registerables)
+  };
 
+  ngOnInit(): void {
+    this.dateList = this.generateLabels(this.startDate, this.endDate);
+    this.updateChartData();
   }
-  startDate = '2023-01-01';
-  endDate = '2024-09-12'
-  dateList = this.generateLabels(this.startDate, this.endDate);
-  data = this.getAvgOfWeeks(this.dateList);
+
+  ngOnChanges(changes: SimpleChanges): void {
+      if (changes['dateList']) {
+        this.updateChartData();
+      }
+  }
   public chartType: ChartType = 'line';
 
-  public chartData: ChartConfiguration['data'] = {
+  public chartData: ChartConfiguration<'line'>['data'] = {
     labels: this.dateList,
     datasets: [
       {
-        data: this.data,
-        label: 'Series A',
-        fill: true,
-        borderColor: 'blue',
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        tension: 0.1
+        data: this.getSalePerDay(this.dateList),
+        label: 'All Customers',
+        borderColor: 'rgb(244, 214, 124)',
+        tension: 0.5,
+        pointRadius: 0
+      },
+      {
+        data: this.getLoyaltyPerDay(this.dateList),
+        label: 'Loyalty Customers',
+        borderColor: '#64D1E3',
+        tension: 0.1,
+        pointRadius: 0
       }
     ]
   };
 
-  public chartOptions: ChartConfiguration['options'] = {
+  public chartOptions: ChartConfiguration<'line'>['options'] = {
     responsive: true,
     scales: {
       x: {
         type: 'category',
+        ticks: {
+          autoSkip: true,
+          maxTicksLimit: 20,
+          minRotation: 45,         // Set minimum rotation to 45 degrees
+          maxRotation: 45, 
+          callback: function(value: any, index: number, ticks: any[]) {
+            const labels = this.chart.data.labels as string[];
+            const label = labels[index];
+            // Show every 7th label (e.g., weekly labels)
+            if (index % 7 === 0) {
+              return label;
+            }
+            return;
+          }
+        }
       },
       y: {
-        type: 'linear',  
-        beginAtZero: true
+        beginAtZero: true,
+        ticks: {
+          callback: (tickValue: string | number) => {
+            return '$' + tickValue.toString();
+          }
+        }
       }
     }
   };
+
+  updateChartData(){
+    this.chartData = {
+      labels: this.dateList,
+      datasets: [
+        {
+          data: this.getSalePerDay(this.dateList),
+          label: 'All Customers',
+          borderColor: 'rgb(244, 214, 124)',
+          tension: 0.5,
+          pointRadius: 0
+        },
+        {
+          data: this.getLoyaltyPerDay(this.dateList),
+          label: 'Loyalty Customers',
+          borderColor: '#64D1E3',
+          tension: 0.1,
+          pointRadius: 0
+        }
+      ]
+    };
+    if (this.chart) {
+      this.chart.update();  // Ensure chart is updated with the new data
+    }
+  }
 
   public generateLabels(startDate: string, endDate: string) {
     const start = new Date(startDate + 'T00:00:00Z');
     const end = new Date(endDate + 'T00:00:00Z');
     
-    const sundays: string[] = [];
-    
-    // Adjust start to the first Sunday
-    if (start.getUTCDay() !== 0) {
-      const daysToAdd = (7 - start.getUTCDay()) % 7;
-      start.setUTCDate(start.getUTCDate() + daysToAdd); // Set to the first Sunday
-    }
-  
+    const days: string[] = [];
     // Loop through and find all Sundays until endDate
     while (start <= end) {
-      sundays.push(start.toISOString().split('T')[0]);  // Push Sunday in YYYY-MM-DD format
-      start.setUTCDate(start.getUTCDate() + 7); // Add 7 days to get the next Sunday
+      days.push(start.toISOString().split('T')[0]); 
+      start.setUTCDate(start.getUTCDate() + 1);
     }
-    return sundays;
+    return days;
   }
 
-  public getAvgOfWeeks(dateList: string[]) {
-    const avgSale: number[] = [];
-    dateList.forEach((sunday) => {  
-      let data = mockData[sunday as keyof MockData]
-      let total = 0
-      data?.forEach((avg: any) => {
-        total = total + avg.amount
-      })
-      avgSale.push(Math.floor(total))
+  public getSalePerDay(dateList: string[], param?: any) {
+    let grandTotal = 0
+    const daySale = dateList.map((day) => {
+      const data = mockData[day as keyof MockData] || [];
+      const total = data?.reduce((sum: number, avg: any) => sum + avg.amount, 0);
+      grandTotal += total
+      return Math.floor(grandTotal);
     })
-    return avgSale
+    return daySale;
   }
+
+  public getLoyaltyPerDay(dateList: string[], param?: any) {
+    let grandTotal = 0;
+    const weekSale = dateList.map((day) => {
+      const data = mockData[day as keyof MockData] || [];
+      const total = data.reduce((sum: number, avg: any) => {
+        return avg.customer_type == 'loyalty' ? sum + avg.amount : sum;
+      }, 0);
+      grandTotal += total
+      return Math.floor(grandTotal);
+    })
+    return weekSale;
+  }
+
 }
