@@ -35,23 +35,8 @@ export class LineComponent implements OnInit, OnChanges{
   public chartType: ChartType = 'line';
 
   public chartData: ChartConfiguration<'line'>['data'] = {
-    labels: this.dateList,
-    datasets: [
-      {
-        data: this.getSalePerDay(this.dateList),
-        label: 'All Customers',
-        borderColor: 'rgb(244, 214, 124)',
-        tension: 0.5,
-        pointRadius: 0
-      },
-      {
-        data: this.getLoyaltyPerDay(this.dateList),
-        label: 'Loyalty Customers',
-        borderColor: '#64D1E3',
-        tension: 0.1,
-        pointRadius: 0
-      }
-    ]
+    labels: [],
+    datasets: []
   };
 
   public chartOptions: ChartConfiguration<'line'>['options'] = {

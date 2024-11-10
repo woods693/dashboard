@@ -30,17 +30,8 @@ export class BarComponent implements OnChanges{
       }
   }
   public chartData: ChartConfiguration<'bar'>['data'] = {
-    labels: ['In-Store', 'Online'],
-    datasets: [
-      {
-        data: [this.getTotalSale(this.startDate, this.endDate, 'instore'), 0],
-        label: 'In-Store'
-      },
-      {
-        data: [0, this.getTotalSale(this.startDate, this.endDate, 'online')], 
-        label: 'Online'
-      }
-    ]
+    labels: [],
+    datasets: []
   }
 
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
