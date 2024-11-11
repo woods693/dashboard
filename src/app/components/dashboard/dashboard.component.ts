@@ -14,7 +14,7 @@ import { DoughnutComponent } from "../graphs/doughnut/doughnut.component";
 export class DashboardComponent implements OnInit{
 
   public startDate: string = '2023-01-01';
-  public endDate: string = '2023-02-12';
+  public endDate: string = '2024-02-12';
 
   ngOnInit(): void {
   }

@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+.chart-wrapper {
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: auto !important;
+}

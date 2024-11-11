@@ -1,3 +1,5 @@
-<app-line [startDate]="startDate" [endDate]="endDate"></app-line>
-<app-bar [startDate]="startDate" [endDate]="endDate"></app-bar>
-<app-doughnut [startDate]="startDate" [endDate]="endDate"></app-doughnut>
+<div class="dashboard-container">
+  <div class="chart-container"><app-line [startDate]="startDate" [endDate]="endDate"></app-line></div>
+  <div class="chart-container"><app-bar [startDate]="startDate" [endDate]="endDate"></app-bar></div>
+  <div class="chart-container doughnut-container"><app-doughnut [startDate]="startDate" [endDate]="endDate"></app-doughnut></div>
+</div>

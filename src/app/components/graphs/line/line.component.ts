@@ -3,7 +3,9 @@ import { ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { MockData, mockData } from '../../../../assets/data/mock_data';
 import { Chart, registerables } from 'chart.js';
+import zoomPlugin from 'chartjs-plugin-zoom';
 
+Chart.register(zoomPlugin);
 @Component({
   standalone: true,
   imports: [BaseChartDirective],
@@ -68,7 +70,39 @@ export class LineComponent implements OnInit, OnChanges{
           }
         }
       }
-    }
+    },
+    plugins: {
+      title: {
+        display: true,      // Enable the title
+        text: 'Total Sales', // Set the title text
+        font: {
+          size: 18,
+        },
+        color: '#333', // Set the title color (optional)
+        padding: {
+          top: 10,
+          bottom: 30, // Set padding for the title
+        },
+      },
+      tooltip: {
+        mode: 'nearest',
+      },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true  // Enable zooming with the mouse wheel
+          },
+          pinch: {
+            enabled: true  // Enable zooming with pinch gestures on touch screens
+          },
+          mode: 'x'       // Zoom both x and y axes
+        },
+      }
+    },
+    hover: {
+      mode: 'nearest',
+      intersect: false,
+    },
   };
 
   updateChartData(){
@@ -80,14 +114,18 @@ export class LineComponent implements OnInit, OnChanges{
           label: 'All Customers',
           borderColor: 'rgb(244, 214, 124)',
           tension: 0.5,
-          pointRadius: 0
+          pointRadius: 0,
+          backgroundColor: 'rgba(255, 159, 64, 0.1)', // Background color under the line
+          fill: true, 
         },
         {
           data: this.getLoyaltyPerDay(this.dateList),
           label: 'Loyalty Customers',
           borderColor: '#64D1E3',
           tension: 0.1,
-          pointRadius: 0
+          pointRadius: 0,
+          backgroundColor: 'rgba(0, 123, 255, 0.2)', // Background color under the line
+          fill: true, 
         }
       ]
     };

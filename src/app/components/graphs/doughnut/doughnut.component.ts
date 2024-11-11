@@ -62,6 +62,22 @@ export class DoughnutComponent implements OnInit, OnChanges{
 
   public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Comparison Chart',
+        font: {
+          size: 18,
+        }
+      },
+      tooltip: {
+        mode: 'nearest',
+      }
+    },
+    hover: {
+      mode: 'nearest',
+      intersect: false,
+    },
   };
 
   updateChartData(){
