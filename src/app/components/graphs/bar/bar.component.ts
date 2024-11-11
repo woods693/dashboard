@@ -82,7 +82,7 @@ export class BarComponent implements OnChanges{
       ]
     };
     if (this.chart) {
-      this.chart.update();  // Ensure chart is updated with the new data
+      this.chart.update();
     }
   }
 

@@ -11,16 +11,14 @@ import { FormsModule } from '@angular/forms';
 })
 export class ModalComponent {
 
-  @Input() isOpen: boolean = false; // Modal visibility flag
-  @Output() closeModal: EventEmitter<void> = new EventEmitter<void>(); // Event to close the modal
+  @Input() isOpen: boolean = false;
+  @Input() startDate: string = '';
+  @Input() endDate: string = '';
+  @Output() closeModal: EventEmitter<void> = new EventEmitter<void>(); 
   @Output() confirmModal: EventEmitter<{ startDate: string, endDate: string }> = new EventEmitter();
 
-  @Input() startDate: string = '';  // Input startDate
-  @Input() endDate: string = '';
-  
-
   close() {
-    this.closeModal.emit(); // Emit an event to close the modal
+    this.closeModal.emit();
   }
 
   confirm() {

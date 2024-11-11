@@ -52,7 +52,7 @@ export class DoughnutComponent implements OnInit, OnChanges{
 
   public doughnutChartColors = [
     {
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],  // Customize colors as needed
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
     },
   ];
 

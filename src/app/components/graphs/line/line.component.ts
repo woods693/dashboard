@@ -72,8 +72,8 @@ export class LineComponent implements OnInit, OnChanges{
     },
     plugins: {
       title: {
-        display: true,      // Enable the title
-        text: 'Total Sales', // Set the title text
+        display: true,
+        text: 'Total Sales',
         font: {
           size: 18,
         },
@@ -84,12 +84,12 @@ export class LineComponent implements OnInit, OnChanges{
       zoom: {
         zoom: {
           wheel: {
-            enabled: true  // Enable zooming with the mouse wheel
+            enabled: true
           },
           pinch: {
-            enabled: true  // Enable zooming with pinch gestures on touch screens
+            enabled: true
           },
-          mode: 'x'       // Zoom both x and y axes
+          mode: 'x'
         },
       }
     },
@@ -110,7 +110,7 @@ export class LineComponent implements OnInit, OnChanges{
           borderColor: 'rgb(244, 214, 124)',
           tension: 0.5,
           pointRadius: 0,
-          backgroundColor: 'rgba(255, 159, 64, 0.1)', // Background color under the line
+          backgroundColor: 'rgba(255, 159, 64, 0.1)',
           fill: true, 
         },
         {
@@ -119,13 +119,13 @@ export class LineComponent implements OnInit, OnChanges{
           borderColor: '#64D1E3',
           tension: 0.1,
           pointRadius: 0,
-          backgroundColor: 'rgba(0, 123, 255, 0.2)', // Background color under the line
+          backgroundColor: 'rgba(0, 123, 255, 0.2)',
           fill: true, 
         }
       ]
     };
     if (this.chart) {
-      this.chart.update();  // Ensure chart is updated with the new data
+      this.chart.update();
     }
   }
 

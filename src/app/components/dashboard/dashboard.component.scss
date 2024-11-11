@@ -3,57 +3,51 @@
   flex-wrap: wrap;
   justify-content: center;
   margin-right: 25px;
-}
-
-.chart-container {
-  flex: 1 1 100%;
-  max-width: 850px;
-  display: flex;
-  justify-content: center;
-  .doughnut-container {
-    max-width: 600px !important;
+  .chart-container {
+    flex: 1 1 100%;
+    max-width: 850px;
+    display: flex;
+    justify-content: center;
+    .doughnut-container {
+      max-width: 600px !important;
+    }
   }
 }
 
-// Date Range Picker Dropdown
 .sidebar-menu {
   position: fixed;
   top: 20px;
   left: 20px;
   z-index: 99;
+  .dropdown-btn {
+    background-color: rgb(238, 62, 78);
+    color: #FFFFFF;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 40px;
+    background-color: rgb(238, 62, 78);
+    min-width: 150px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 7px;
+    a {
+      color: #FFFFFF;
+      padding: 8px 12px;
+      text-decoration: none;
+      display: block;
+    }
+  }
 }
 
-.dropdown-btn {
-  background-color: rgb(238, 62, 78);
-  color: #FFFFFF;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 40px;
-  background-color: rgb(238, 62, 78);
-  min-width: 150px;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  border-radius: 7px;
-}
-
-/* Dropdown links */
-.dropdown-content a {
-  color: #FFFFFF;
-  padding: 8px 12px;
-  text-decoration: none;
-  display: block;
-}
-
-/* Show the dropdown content on button hover */
 .sidebar-menu:hover .dropdown-content {
   display: block;
 }

@@ -50,12 +50,12 @@ export class DashboardComponent implements OnInit{
     // Get first day
     const firstDayLastMonth: Date = new Date(today);
     firstDayLastMonth.setMonth(today.getMonth() - 1);
-    firstDayLastMonth.setDate(1); // Set to the 1st day of last month
+    firstDayLastMonth.setDate(1);
 
     // Get the last day
     const lastDayLastMonth: Date = new Date(firstDayLastMonth);
-    lastDayLastMonth.setMonth(firstDayLastMonth.getMonth() + 1); // Move to next month
-    lastDayLastMonth.setDate(0); // Set to the last day of the previous month
+    lastDayLastMonth.setMonth(firstDayLastMonth.getMonth() + 1);
+    lastDayLastMonth.setDate(0);
 
     this.startDate = firstDayLastMonth.toISOString().split('T')[0];
     this.endDate = lastDayLastMonth.toISOString().split('T')[0];
