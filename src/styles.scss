@@ -2,10 +2,20 @@
 .chart-wrapper {
   width: 100%;
   margin: 0 auto;
-  margin-bottom: 20px;
+  position: relative;
 }
 
 .chart-wrapper canvas {
   width: 100% !important;
   height: auto !important;
+}
+
+.chart-title {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  color: #A9A9A9;
+  font-weight: bold;
 }

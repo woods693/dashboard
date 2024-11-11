@@ -4,6 +4,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { MockData, mockData } from '../../../../assets/data/mock_data';
 import { Chart, registerables } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
+import { DateHelper } from '../../../services/date.helper';
 
 Chart.register(zoomPlugin);
 @Component({
@@ -17,6 +18,7 @@ export class LineComponent implements OnInit, OnChanges{
 
   @Input() startDate!: string;
   @Input() endDate!: string;
+  titleDate: string = '';
   public dateList: string[] = [];
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
@@ -26,11 +28,13 @@ export class LineComponent implements OnInit, OnChanges{
 
   ngOnInit(): void {
     this.updateChartData();
+    this.titleDate = DateHelper.setDateRangeString(this.startDate, this.endDate);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['startDate'] || changes['endDate']) {
       this.updateChartData();
+      this.titleDate = DateHelper.setDateRangeString(this.startDate, this.endDate);
     }
   }
   public chartType: ChartType = 'line';
@@ -48,7 +52,7 @@ export class LineComponent implements OnInit, OnChanges{
         ticks: {
           autoSkip: true,
           maxTicksLimit: 20,
-          minRotation: 45,         // Set minimum rotation to 45 degrees
+          minRotation: 45,
           maxRotation: 45, 
           callback: function(value: any, index: number, ticks: any[]) {
             const labels = this.chart.data.labels as string[];
@@ -73,7 +77,7 @@ export class LineComponent implements OnInit, OnChanges{
     plugins: {
       title: {
         display: true,
-        text: 'Total Sales',
+        text: ['Total Sales'],
         font: {
           size: 18,
         },
@@ -134,7 +138,6 @@ export class LineComponent implements OnInit, OnChanges{
     const end = new Date(endDate + 'T00:00:00Z');
     
     const days: string[] = [];
-    // Loop through and find all Sundays until endDate
     while (start <= end) {
       days.push(start.toISOString().split('T')[0]); 
       start.setUTCDate(start.getUTCDate() + 1);
@@ -148,11 +151,11 @@ export class LineComponent implements OnInit, OnChanges{
       const data = mockData[day as keyof MockData] || [];
       let total = 0
       if (loyalty) {
-        total = data.reduce((sum: number, avg: any) => {
-          return avg.customer_type == 'loyalty' ? sum + avg.amount : sum;
+        total = data.reduce((sum: number, sale: any) => {
+          return sale.customer_type == 'loyalty' ? sum + sale.amount : sum;
         }, 0);
       } else {
-        total = data?.reduce((sum: number, avg: any) => sum + avg.amount, 0);
+        total = data?.reduce((sum: number, sale: any) => sum + sale.amount, 0);
       }
       grandTotal += total
       return grandTotal;

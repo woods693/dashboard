@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@
 import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { MockData, mockData } from '../../../../assets/data/mock_data';
+import { DateHelper } from '../../../services/date.helper';
 
 interface SaleData {
   customer_type: 'loyalty' | 'customer';
@@ -21,7 +22,7 @@ export class DoughnutComponent implements OnInit, OnChanges{
 
   @Input() startDate!: string;
   @Input() endDate!: string;
-
+  titleDate: string = '';
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   public doughnutChartLabels: string[] = [
@@ -41,12 +42,14 @@ export class DoughnutComponent implements OnInit, OnChanges{
   ngOnInit(): void {
     this.getAllSaleNumbers(this.startDate, this.endDate);
     this.updateChartData()
+    this.titleDate = DateHelper.setDateRangeString(this.startDate, this.endDate);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['startDate'] || changes['endDate']) {
       this.getAllSaleNumbers(this.startDate, this.endDate);
       this.updateChartData();
+      this.titleDate = DateHelper.setDateRangeString(this.startDate, this.endDate);
     }
   }
 
@@ -106,9 +109,9 @@ export class DoughnutComponent implements OnInit, OnChanges{
     while (start <= end) {
       const date = start.toISOString().split('T')[0];
       const data = mockData[date as keyof MockData] || [];
-      data?.reduce((sum: number, avg: SaleData) => {
-        this.saleMap[avg.customer_type]+=avg.amount;
-        this.saleMap[avg.sales_channel]+=avg.amount;
+      data?.reduce((sum: number, sale: SaleData) => {
+        this.saleMap[sale.customer_type]+=sale.amount;
+        this.saleMap[sale.sales_channel]+=sale.amount;
       }, 0);
       start.setUTCDate(start.getUTCDate() + 1);
     }

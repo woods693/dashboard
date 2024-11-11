@@ -3,6 +3,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { MockData, mockData } from '../../../../assets/data/mock_data';
 import { Chart, registerables } from 'chart.js';
+import { DateHelper } from '../../../services/date.helper';
 
 @Component({
   selector: 'app-bar',
@@ -17,7 +18,7 @@ export class BarComponent implements OnChanges{
 
   @Input() startDate!: string;
   @Input() endDate!: string;
-
+  titleDate: string = '';
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   constructor() {
@@ -27,6 +28,7 @@ export class BarComponent implements OnChanges{
   ngOnChanges(changes: SimpleChanges): void {
       if(changes['startDate'] || changes['endDate']) {
         this.updateChartData();
+        this.titleDate = DateHelper.setDateRangeString(this.startDate, this.endDate);
       }
   }
   public chartData: ChartConfiguration<'bar'>['data'] = {
@@ -94,8 +96,8 @@ export class BarComponent implements OnChanges{
     while (start <= end) {
       const date = start.toISOString().split('T')[0];
       const data = mockData[date as keyof MockData] || []
-      total += data?.reduce((sum: number, avg: any) => {
-        return avg.sales_channel == channel ? sum+avg.amount : sum;
+      total += data?.reduce((sum: number, sale: any) => {
+        return sale.sales_channel == channel ? sum+sale.amount : sum;
       }, 0);
       start.setUTCDate(start.getUTCDate() + 1);
     }

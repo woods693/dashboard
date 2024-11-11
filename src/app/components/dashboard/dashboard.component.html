@@ -1,27 +1,31 @@
-<div class="sidebar-menu">
-  <button class="dropdown-btn">Date Range Picker ▶</button>
-  <div class="dropdown-content">
-    <a (click)="getLastMonth()">Last Month</a>
-    <a (click)="getLastQuarterDates()">Last Quarter</a>
-    <a (click)="getLastYearDates()">Last Year</a>
-    <a (click)="openCustomModal()">Custom Dates</a>
-    <a (click)="reset()">Reset to Default</a>
+<div style="display: block; margin-bottom: 100px;"></div>
+<div class="container">
+  <div class="sidebar-menu">
+    <button class="dropdown-btn">Date Range Picker ▶</button>
+    <div class="dropdown-content">
+      <a (click)="getLastMonth()">Last Month</a>
+      <a (click)="getLastQuarterDates()">Last Quarter</a>
+      <a (click)="getLastYearDates()">Last Year</a>
+      <a (click)="openCustomModal()">Custom Dates</a>
+      <a (click)="reset()">Reset to Default</a>
+    </div>
   </div>
-</div>
-<app-modal
-  [isOpen]="isModalOpen"
-  [startDate]="startDate"
-  [endDate]="endDate"
-  (closeModal)="closeCustomModal()"
-  (confirmModal)="onConfirmCustomDate($event)">
-</app-modal>
-
-<div class="dashboard-container">
-  <div class="chart-container"><app-line [startDate]="startDate" [endDate]="endDate"></app-line></div>
-  <div class="chart-container"><app-bar [startDate]="startDate" [endDate]="endDate"></app-bar></div>
-  <div class="chart-container">
-    <div class="doughnut-container">
-      <app-doughnut [startDate]="startDate" [endDate]="endDate"></app-doughnut>
+  <app-modal
+    [isOpen]="isModalOpen"
+    [startDate]="startDate"
+    [endDate]="endDate"
+    (closeModal)="closeCustomModal()"
+    (confirmModal)="onConfirmCustomDate($event)">
+  </app-modal>
+  
+  <div class="dashboard-container">
+    <div class="chart-container"><app-line [startDate]="startDate" [endDate]="endDate"></app-line></div>
+    <div class="chart-container"><app-bar [startDate]="startDate" [endDate]="endDate"></app-bar></div>
+    <div class="chart-container">
+      <div class="doughnut-container">
+        <app-doughnut [startDate]="startDate" [endDate]="endDate"></app-doughnut>
+      </div>
     </div>
   </div>
 </div>
+
