@@ -25,14 +25,13 @@ export class LineComponent implements OnInit, OnChanges{
   };
 
   ngOnInit(): void {
-    this.dateList = this.generateLabels(this.startDate, this.endDate);
     this.updateChartData();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-      if (changes['dateList']) {
-        this.updateChartData();
-      }
+    if(changes['startDate'] || changes['endDate']) {
+      this.updateChartData();
+    }
   }
   public chartType: ChartType = 'line';
 
@@ -78,11 +77,6 @@ export class LineComponent implements OnInit, OnChanges{
         font: {
           size: 18,
         },
-        color: '#333', // Set the title color (optional)
-        padding: {
-          top: 10,
-          bottom: 30, // Set padding for the title
-        },
       },
       tooltip: {
         mode: 'nearest',
@@ -106,6 +100,7 @@ export class LineComponent implements OnInit, OnChanges{
   };
 
   updateChartData(){
+    this.dateList = this.generateLabels(this.startDate, this.endDate);
     this.chartData = {
       labels: this.dateList,
       datasets: [
@@ -119,7 +114,7 @@ export class LineComponent implements OnInit, OnChanges{
           fill: true, 
         },
         {
-          data: this.getLoyaltyPerDay(this.dateList),
+          data: this.getSalePerDay(this.dateList, null, true),
           label: 'Loyalty Customers',
           borderColor: '#64D1E3',
           tension: 0.1,
@@ -147,28 +142,21 @@ export class LineComponent implements OnInit, OnChanges{
     return days;
   }
 
-  public getSalePerDay(dateList: string[], param?: any) {
+  public getSalePerDay(dateList: string[], param?: any, loyalty?: boolean) {
     let grandTotal = 0
     const daySale = dateList.map((day) => {
       const data = mockData[day as keyof MockData] || [];
-      const total = data?.reduce((sum: number, avg: any) => sum + avg.amount, 0);
+      let total = 0
+      if (loyalty) {
+        total = data.reduce((sum: number, avg: any) => {
+          return avg.customer_type == 'loyalty' ? sum + avg.amount : sum;
+        }, 0);
+      } else {
+        total = data?.reduce((sum: number, avg: any) => sum + avg.amount, 0);
+      }
       grandTotal += total
-      return Math.floor(grandTotal);
+      return grandTotal;
     })
     return daySale;
   }
-
-  public getLoyaltyPerDay(dateList: string[], param?: any) {
-    let grandTotal = 0;
-    const weekSale = dateList.map((day) => {
-      const data = mockData[day as keyof MockData] || [];
-      const total = data.reduce((sum: number, avg: any) => {
-        return avg.customer_type == 'loyalty' ? sum + avg.amount : sum;
-      }, 0);
-      grandTotal += total
-      return Math.floor(grandTotal);
-    })
-    return weekSale;
-  }
-
 }

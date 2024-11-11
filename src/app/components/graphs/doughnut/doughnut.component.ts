@@ -44,7 +44,8 @@ export class DoughnutComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['saleMap']) {
+    if(changes['startDate'] || changes['endDate']) {
+      this.getAllSaleNumbers(this.startDate, this.endDate);
       this.updateChartData();
     }
   }
@@ -89,20 +90,25 @@ export class DoughnutComponent implements OnInit, OnChanges{
       ],
     };
     if (this.chart) {
-      this.chart.update();  // Ensure chart is updated with the new data
+      this.chart.update();
     }
   }
 
   public getAllSaleNumbers(startDate: string, endDate: string) {
+    this.saleMap = {
+      'loyalty': 0,
+      'customer': 0,
+      'instore': 0,
+      'online': 0
+    };
     const start = new Date(startDate + 'T00:00:00Z');
     const end = new Date(endDate + 'T00:00:00Z');
-
     while (start <= end) {
       const date = start.toISOString().split('T')[0];
       const data = mockData[date as keyof MockData] || [];
       data?.reduce((sum: number, avg: SaleData) => {
-        this.saleMap[avg.customer_type]+=Math.floor(avg.amount);
-        this.saleMap[avg.sales_channel]+=Math.floor(avg.amount);
+        this.saleMap[avg.customer_type]+=avg.amount;
+        this.saleMap[avg.sales_channel]+=avg.amount;
       }, 0);
       start.setUTCDate(start.getUTCDate() + 1);
     }

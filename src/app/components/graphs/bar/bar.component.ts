@@ -99,7 +99,7 @@ export class BarComponent implements OnChanges{
       }, 0);
       start.setUTCDate(start.getUTCDate() + 1);
     }
-    return Math.floor(total);
+    return total;
   }
 
 }
