@@ -1,0 +1,19 @@
+<div *ngIf="isOpen" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Custom Date Input</h2>
+      <button (click)="close()">X</button>
+    </div>
+    <div class="modal-body">
+      <label for="customStartDate">Start Date:</label>
+      <input id="customStartDate" type="date" [(ngModel)]="startDate" min="2023-01-01"/>
+      <br />
+      <label for="customEndDate">End Date:</label>
+      <input id="customEndDate" type="date" [(ngModel)]="endDate" [max]="'2024-11-12'"/>
+    </div>
+    <div class="modal-footer">
+      <button (click)="close()">Cancel</button>
+      <button (click)="confirm()">Confirm</button>
+    </div>
+  </div>
+</div>

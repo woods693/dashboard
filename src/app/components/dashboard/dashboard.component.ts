@@ -5,30 +5,43 @@ import { BarComponent } from "../graphs/bar/bar.component";
 import { DoughnutComponent } from "../graphs/doughnut/doughnut.component";
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ModalComponent } from "../modal/modal.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [LineComponent, BarComponent, DoughnutComponent, FormsModule, CommonModule],
+  imports: [LineComponent, BarComponent, DoughnutComponent, FormsModule, CommonModule, ModalComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit{
 
-  startDate: string = '2023-01-01';
-  endDate: string = '2024-02-12';
-  showCustomDateSelection: boolean = false;
+  startDate: string = '';
+  endDate: string = '';
+  isModalOpen: boolean = false;
 
   ngOnInit(): void {
+    this.getThisYearDates();
   }
 
   reset() {
-    this.startDate = '2023-01-01';
-    this.endDate = '2024-02-12';
+    this.getThisYearDates();
   }
 
-  toggleCustomInput() {
-    this.showCustomDateSelection = !this.showCustomDateSelection;
+  openCustomModal() {
+    this.isModalOpen = true;
+  }
+
+  closeCustomModal() {
+    this.isModalOpen = false;
+  }
+
+  onConfirmCustomDate(customDates: { startDate: string, endDate: string }) {
+    this.startDate = customDates.startDate;
+    this.endDate = customDates.endDate;
+    console.log('Confirmed Start Date:', this.startDate);
+    console.log('Confirmed End Date:', this.endDate);
+    this.closeCustomModal();
   }
 
   getLastMonth() {
@@ -80,8 +93,15 @@ export class DashboardComponent implements OnInit{
     const firstDayLastYear = new Date(lastYear, 0, 1);
     // Get the last day
     const lastDayLastYear = new Date(lastYear, 11, 31);
-    this.startDate = firstDayLastYear.toISOString().split('T')[0]
-    this.endDate = lastDayLastYear.toISOString().split('T')[0]
+    this.startDate = firstDayLastYear.toISOString().split('T')[0];
+    this.endDate = lastDayLastYear.toISOString().split('T')[0];
   }
   
+  getThisYearDates() {
+    const today = new Date();
+    const year = today.getFullYear()
+    const firstDayOfYear = new Date(year, 0, 1);
+    this.startDate = firstDayOfYear.toISOString().split('T')[0];
+    this.endDate = '2024-11-12'; //endDate is hard coded because the data is not real.
+  }
 }
