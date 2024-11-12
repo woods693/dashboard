@@ -22,6 +22,8 @@ export class LineComponent implements OnInit, OnChanges{
   titleDate: string = '';
   public dateList: string[] = [];
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  dataList1: number[] = []
+  dataList2: number[] = []
 
   constructor() {
     Chart.register(...registerables)
@@ -76,13 +78,6 @@ export class LineComponent implements OnInit, OnChanges{
       }
     },
     plugins: {
-      title: {
-        display: true,
-        text: ['Total Sales'],
-        font: {
-          size: 18,
-        },
-      },
       tooltip: {
         mode: 'nearest',
       },
@@ -106,11 +101,13 @@ export class LineComponent implements OnInit, OnChanges{
 
   updateChartData(){
     this.dateList = this.generateLabels(this.startDate, this.endDate);
+    this.dataList1 = this.getSalePerDay(this.dateList);
+    this.dataList2 = this.getSalePerDay(this.dateList, null, true);
     this.chartData = {
       labels: this.dateList,
       datasets: [
         {
-          data: this.getSalePerDay(this.dateList),
+          data: this.dataList1,
           label: 'All Customers',
           borderColor: 'rgb(244, 214, 124)',
           tension: 0.5,
@@ -119,7 +116,7 @@ export class LineComponent implements OnInit, OnChanges{
           fill: true, 
         },
         {
-          data: this.getSalePerDay(this.dateList, null, true),
+          data: this.dataList2,
           label: 'Loyalty Customers',
           borderColor: '#64D1E3',
           tension: 0.1,
@@ -153,7 +150,7 @@ export class LineComponent implements OnInit, OnChanges{
       let total = 0
       if (loyalty) {
         total = data.reduce((sum: number, sale: any) => {
-          return sale.customer_type == 'loyalty' ? sum + sale.amount : sum;
+          return sale.customerType == 'loyalty' ? sum + sale.amount : sum;
         }, 0);
       } else {
         total = data?.reduce((sum: number, sale: any) => sum + sale.amount, 0);

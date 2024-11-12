@@ -54,13 +54,6 @@ export class BarComponent implements OnChanges{
       }
     },
     plugins: {
-      title: {
-        display: true,
-        text: 'Sales Channel Breakdown',
-        font: {
-          size: 18,
-        }
-      },
       tooltip: {
         mode: 'nearest',
       }

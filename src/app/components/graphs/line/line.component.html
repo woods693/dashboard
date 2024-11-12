@@ -1,5 +1,8 @@
 <div style="display: block;" class="chart-wrapper">
-  <div class="chart-title">{{ titleDate }}</div>
+  <div class="chart-title">
+    <div>Total Sales</div>
+    <div>{{titleDate}}</div>
+  </div>
   <canvas baseChart
           [data]="chartData"
           [type]="'line'"

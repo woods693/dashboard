@@ -1,5 +1,8 @@
 <div style="display: block;" class="chart-wrapper">
-  <div class="chart-title">{{ titleDate }}</div>
+  <div class="chart-title">
+    <div>Sale Comparison Chart</div>
+    <div>{{titleDate}}</div>
+  </div>
   <canvas baseChart
     [data]="chartData"
     [options]="doughnutChartOptions"
