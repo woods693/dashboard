@@ -22,8 +22,10 @@ export class LineComponent implements OnInit, OnChanges{
   titleDate: string = '';
   public dateList: string[] = [];
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
-  dataList1: number[] = []
-  dataList2: number[] = []
+  dataList1: number[] = [];
+  dataList2: number[] = [];
+  allFinal: number = 0;
+  loyaltyFinal: number = 0;
 
   constructor() {
     Chart.register(...registerables)
@@ -155,9 +157,14 @@ export class LineComponent implements OnInit, OnChanges{
       } else {
         total = data?.reduce((sum: number, sale: any) => sum + sale.amount, 0);
       }
-      grandTotal += total
+      grandTotal += total;
       return grandTotal;
     })
+    if (loyalty) {
+      this.loyaltyFinal = Math.floor(daySale[daySale.length - 1]);
+    } else {
+      this.allFinal = Math.floor(daySale[daySale.length - 1]);
+    }
     return daySale;
   }
 }

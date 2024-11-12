@@ -19,6 +19,8 @@ export class BarComponent implements OnChanges{
   @Input() startDate!: string;
   @Input() endDate!: string;
   @Input() dataSet!: DailyData;
+  finalInstore: number = 0;
+  finalOnline: number = 0;
   
   titleDate: string = '';
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
@@ -96,6 +98,12 @@ export class BarComponent implements OnChanges{
       }, 0);
       start.setUTCDate(start.getUTCDate() + 1);
     }
+    if(channel == 'instore') {
+      this.finalInstore = Math.floor(total);
+    } else {
+      this.finalOnline = Math.floor(total);
+    }
+      
     return total;
   }
 
