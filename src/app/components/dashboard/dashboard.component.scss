@@ -10,11 +10,12 @@
   .chart-container {
     flex: 1 1 100%;
     max-width: 850px;
-    display: flex;
-    justify-content: center;
     margin-bottom: 50px;
+    text-align: center;
     .doughnut-container {
       max-width: 600px !important;
+      width: 100%;
+      display: inline-block;
     }
   }
 }
