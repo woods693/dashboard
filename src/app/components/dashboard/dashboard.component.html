@@ -1,13 +1,16 @@
 <div style="display: block; margin-bottom: 100px;"></div>
 <div class="container">
   <div class="sidebar-menu">
-    <button class="dropdown-btn">Date Range Picker ▶</button>
+    <button class="dropdown-btn">MENU ▶</button>
     <div class="dropdown-content">
       <a (click)="getLastMonth()">Last Month</a>
       <a (click)="getLastQuarterDates()">Last Quarter</a>
       <a (click)="getLastYearDates()">Last Year</a>
       <a (click)="openCustomModal()">Custom Dates</a>
       <a (click)="reset()">Reset to Default</a>
+      <a><input type="radio" name="radioGroup" value="dataset1" [(ngModel)]="selectedDataSet" (change)="selectDataSet1()"/>Data 1</a>
+      <a><input type="radio" name="radioGroup" value="dataset2" [(ngModel)]="selectedDataSet" (change)="selectDataSet2()"/>Data 2</a>
+      <a><input type="radio" name="radioGroup" value="dataset3" [(ngModel)]="selectedDataSet" (change)="selectDataSet3()"/>Data 3</a>
     </div>
   </div>
   <app-modal
@@ -18,12 +21,12 @@
     (confirmModal)="onConfirmCustomDate($event)">
   </app-modal>
   
-  <div class="dashboard-container">
-    <div class="chart-container"><app-line [startDate]="startDate" [endDate]="endDate"></app-line></div>
-    <div class="chart-container"><app-bar [startDate]="startDate" [endDate]="endDate"></app-bar></div>
+  <div class="dashboard-container" *ngIf="dataSet">
+    <div class="chart-container"><app-line [startDate]="startDate" [endDate]="endDate" [dataSet]="dataSet"></app-line></div>
+    <div class="chart-container"><app-bar [startDate]="startDate" [endDate]="endDate"[dataSet]="dataSet"></app-bar></div>
     <div class="chart-container">
       <div class="doughnut-container">
-        <app-doughnut [startDate]="startDate" [endDate]="endDate"></app-doughnut>
+        <app-doughnut [startDate]="startDate" [endDate]="endDate" [dataSet]="dataSet"></app-doughnut>
       </div>
     </div>
   </div>

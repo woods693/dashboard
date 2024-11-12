@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { MockData, mockData } from '../../../../assets/data/mock_data';
 import { Chart, registerables } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import { DateHelper } from '../../../services/date.helper';
+import { DailyData } from '../../../services/data.interface';
 
 Chart.register(zoomPlugin);
 @Component({
@@ -18,6 +18,7 @@ export class LineComponent implements OnInit, OnChanges{
 
   @Input() startDate!: string;
   @Input() endDate!: string;
+  @Input() dataSet!: DailyData;
   titleDate: string = '';
   public dateList: string[] = [];
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
@@ -32,7 +33,7 @@ export class LineComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['startDate'] || changes['endDate']) {
+    if(changes['startDate'] || changes['endDate'] || changes['dataSet']) {
       this.updateChartData();
       this.titleDate = DateHelper.setDateRangeString(this.startDate, this.endDate);
     }
@@ -148,7 +149,7 @@ export class LineComponent implements OnInit, OnChanges{
   public getSalePerDay(dateList: string[], param?: any, loyalty?: boolean) {
     let grandTotal = 0
     const daySale = dateList.map((day) => {
-      const data = mockData[day as keyof MockData] || [];
+      const data = this.dataSet[day as keyof DailyData] || [];
       let total = 0
       if (loyalty) {
         total = data.reduce((sum: number, sale: any) => {

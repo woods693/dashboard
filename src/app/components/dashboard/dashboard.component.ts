@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { mockData } from '../../../assets/data/mock_data';
 import { LineComponent } from "../graphs/line/line.component";
 import { BarComponent } from "../graphs/bar/bar.component";
 import { DoughnutComponent } from "../graphs/doughnut/doughnut.component";
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from "../modal/modal.component";
+import { DataService } from '../../services/data.service';
+import { DailyData } from '../../services/data.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,13 +20,30 @@ export class DashboardComponent implements OnInit{
   startDate: string = '';
   endDate: string = '';
   isModalOpen: boolean = false;
+  dataSet: DailyData | null = null;
+  selectedDataSet: string = 'dataset1';
+
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.getThisYearDates();
+    this.dataService.getDataSet1().subscribe(data => this.dataSet = data);
   }
 
   reset() {
     this.getThisYearDates();
+  }
+
+  selectDataSet1(){
+    this.dataService.getDataSet1().subscribe(data => this.dataSet = data);
+  }
+
+  selectDataSet2(){
+    this.dataService.getDataSet2().subscribe(data => this.dataSet = data);
+  }
+
+  selectDataSet3(){
+    this.dataService.getDataSet3().subscribe(data => this.dataSet = data);
   }
 
   openCustomModal() {
@@ -39,8 +57,6 @@ export class DashboardComponent implements OnInit{
   onConfirmCustomDate(customDates: { startDate: string, endDate: string }) {
     this.startDate = customDates.startDate;
     this.endDate = customDates.endDate;
-    console.log('Confirmed Start Date:', this.startDate);
-    console.log('Confirmed End Date:', this.endDate);
     this.closeCustomModal();
   }
 

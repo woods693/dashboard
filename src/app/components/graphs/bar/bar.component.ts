@@ -1,9 +1,9 @@
 import { Component, Inject, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
-import { MockData, mockData } from '../../../../assets/data/mock_data';
 import { Chart, registerables } from 'chart.js';
 import { DateHelper } from '../../../services/date.helper';
+import { DailyData, Sale } from '../../../services/data.interface';
 
 @Component({
   selector: 'app-bar',
@@ -18,6 +18,8 @@ export class BarComponent implements OnChanges{
 
   @Input() startDate!: string;
   @Input() endDate!: string;
+  @Input() dataSet!: DailyData;
+  
   titleDate: string = '';
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
@@ -26,7 +28,7 @@ export class BarComponent implements OnChanges{
   };
 
   ngOnChanges(changes: SimpleChanges): void {
-      if(changes['startDate'] || changes['endDate']) {
+      if(changes['startDate'] || changes['endDate'] || changes['dataSet']) {
         this.updateChartData();
         this.titleDate = DateHelper.setDateRangeString(this.startDate, this.endDate);
       }
@@ -95,9 +97,9 @@ export class BarComponent implements OnChanges{
 
     while (start <= end) {
       const date = start.toISOString().split('T')[0];
-      const data = mockData[date as keyof MockData] || []
-      total += data?.reduce((sum: number, sale: any) => {
-        return sale.sales_channel == channel ? sum+sale.amount : sum;
+      const data = this.dataSet[date as keyof DailyData] || []
+      total += data?.reduce((sum: number, sale: Sale) => {
+        return sale.salesChannel == channel ? sum+sale.amount : sum;
       }, 0);
       start.setUTCDate(start.getUTCDate() + 1);
     }
