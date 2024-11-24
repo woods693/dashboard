@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit{
   isModalOpen: boolean = false;
   dataSet: DailyData | null = null;
   selectedDataSet: string = 'dataset1';
+  today: Date = new Date('2024-11-12'); // hard code todays date for this project. Data is not real
 
   constructor(private dataService: DataService) {}
 
@@ -61,11 +62,9 @@ export class DashboardComponent implements OnInit{
   }
 
   getLastMonth() {
-    const today: Date = new Date('2024-11-12'); // hard code todays date for this project. Data is not real
-
     // Get first day
-    const firstDayLastMonth: Date = new Date(today);
-    firstDayLastMonth.setMonth(today.getMonth() - 1);
+    const firstDayLastMonth: Date = new Date(this.today);
+    firstDayLastMonth.setMonth(this.today.getMonth() - 1);
     firstDayLastMonth.setDate(1);
 
     // Get the last day
@@ -79,23 +78,22 @@ export class DashboardComponent implements OnInit{
 
   getLastQuarterDates() {
     // 3 months per quarter
-    const today = new Date();
-    const currentMonth = today.getMonth(); // 0 for Jan, 11 for Dec
+    const currentMonth = this.today.getMonth(); // 0 for Jan, 11 for Dec
     let firstDayLastQuarter: Date;
     let lastDayLastQuarter: Date;
     // Determine the first and last day of the last quarter
     if (currentMonth >= 0 && currentMonth <= 2) { // Jan-Mar (Q1)
-      firstDayLastQuarter = new Date(today.getFullYear() - 1, 9, 1); // Last year's Q4: Oct 1
-      lastDayLastQuarter = new Date(today.getFullYear() - 1, 11, 31); // Last year's Q4: Dec 31
+      firstDayLastQuarter = new Date(this.today.getFullYear() - 1, 9, 1); // Last year's Q4: Oct 1
+      lastDayLastQuarter = new Date(this.today.getFullYear() - 1, 11, 31); // Last year's Q4: Dec 31
     } else if (currentMonth >= 3 && currentMonth <= 5) { // Apr-Jun (Q2)
-      firstDayLastQuarter = new Date(today.getFullYear(), 0, 1); // Current year's Q1: Jan 1
-      lastDayLastQuarter = new Date(today.getFullYear(), 2, 31); // Current year's Q1: Mar 31
+      firstDayLastQuarter = new Date(this.today.getFullYear(), 0, 1); // Current year's Q1: Jan 1
+      lastDayLastQuarter = new Date(this.today.getFullYear(), 2, 31); // Current year's Q1: Mar 31
     } else if (currentMonth >= 6 && currentMonth <= 8) { // Jul-Sep (Q3)
-      firstDayLastQuarter = new Date(today.getFullYear(), 3, 1); // Current year's Q2: Apr 1
-      lastDayLastQuarter = new Date(today.getFullYear(), 5, 30); // Current year's Q2: Jun 30
+      firstDayLastQuarter = new Date(this.today.getFullYear(), 3, 1); // Current year's Q2: Apr 1
+      lastDayLastQuarter = new Date(this.today.getFullYear(), 5, 30); // Current year's Q2: Jun 30
     } else { // Oct-Dec (Q4)
-      firstDayLastQuarter = new Date(today.getFullYear(), 6, 1); // Current year's Q3: Jul 1
-      lastDayLastQuarter = new Date(today.getFullYear(), 8, 30); // Current year's Q3: Sep 30
+      firstDayLastQuarter = new Date(this.today.getFullYear(), 6, 1); // Current year's Q3: Jul 1
+      lastDayLastQuarter = new Date(this.today.getFullYear(), 8, 30); // Current year's Q3: Sep 30
     }
   
     this.startDate = firstDayLastQuarter.toISOString().split('T')[0]
@@ -103,8 +101,7 @@ export class DashboardComponent implements OnInit{
   }
 
   getLastYearDates() {
-    const today = new Date();
-    const lastYear = today.getFullYear() - 1;
+    const lastYear = this.today.getFullYear() - 1;
     // Get first day
     const firstDayLastYear = new Date(lastYear, 0, 1);
     // Get the last day
@@ -114,8 +111,7 @@ export class DashboardComponent implements OnInit{
   }
   
   getThisYearDates() {
-    const today = new Date();
-    const year = today.getFullYear()
+    const year = this.today.getFullYear()
     const firstDayOfYear = new Date(year, 0, 1);
     this.startDate = firstDayOfYear.toISOString().split('T')[0];
     this.endDate = '2024-11-12'; //endDate is hard coded because the data is not real.
